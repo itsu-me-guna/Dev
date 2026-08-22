@@ -1,15 +1,16 @@
 provider "aws" {
-  region = "us-east-1"   # change to your region
+  region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "glue_scripts" {
-  bucket = "my-glue-scripts-bucket-from-tf-20260823-000001"   # must be globally unique
+# Look up an existing bucket instead of creating one
+data "aws_s3_bucket" "glue_scripts" {
+  bucket = "my-glue-scripts-bucket-from-tf-20260823-000001"
 }
 
 resource "aws_s3_object" "script" {
-  bucket = aws_s3_bucket.glue_scripts.id
+  bucket = data.aws_s3_bucket.glue_scripts.id
   key    = "scripts/My_Source_ingest.py"
-  source = "src/My_Source_ingest.py"   # local path to your file
+  source = "src/My_Source_ingest.py"
 }
 
 resource "aws_iam_role" "glue_role" {
@@ -38,12 +39,12 @@ resource "aws_glue_job" "my_job" {
 
   command {
     name            = "glueetl"
-    script_location = "s3://${aws_s3_bucket.glue_scripts.id}/${aws_s3_object.script.key}"
+    script_location = "s3://${data.aws_s3_bucket.glue_scripts.id}/${aws_s3_object.script.key}"
     python_version  = "3"
   }
 
   default_arguments = {
-    "--TempDir" = "s3://${aws_s3_bucket.glue_scripts.id}/tmp/"
+    "--TempDir"      = "s3://${data.aws_s3_bucket.glue_scripts.id}/tmp/"
     "--job-language" = "python"
   }
 
