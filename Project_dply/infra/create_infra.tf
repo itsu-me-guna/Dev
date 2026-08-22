@@ -11,7 +11,7 @@ data "aws_s3_bucket" "glue_scripts" {
 resource "aws_s3_object" "script" {
   bucket = data.aws_s3_bucket.glue_scripts.id
   key    = "scripts/My_Source_ingest.py"
-  source = "${path.module}/../../src/My_Source_ingest.py"
+  source = "${path.module}/../src/My_Source_ingest.py"
 }
 
 # Use existing IAM role
