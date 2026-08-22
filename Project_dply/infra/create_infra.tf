@@ -2,7 +2,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-# Look up existing bucket
+# Use existing bucket
 data "aws_s3_bucket" "glue_scripts" {
   bucket = "my-glue-scripts-bucket-from-tf-20260823-000001"
 }
@@ -11,10 +11,10 @@ data "aws_s3_bucket" "glue_scripts" {
 resource "aws_s3_object" "script" {
   bucket = data.aws_s3_bucket.glue_scripts.id
   key    = "scripts/My_Source_ingest.py"
-  source = "src/My_Source_ingest.py"
+  source = "${path.module}/../../src/My_Source_ingest.py"
 }
 
-# Look up existing IAM role
+# Use existing IAM role
 data "aws_iam_role" "glue_role" {
   name = "glue-job-role-guna-from-tf"
 }
