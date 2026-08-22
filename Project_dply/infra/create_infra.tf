@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "glue_scripts" {
-  bucket = "my-glue-scripts-bucket-20260822"   # must be globally unique
+  bucket = "my-glue-scripts-bucket-from-tf-20260823-000001"   # must be globally unique
 }
 
 resource "aws_s3_object" "script" {
@@ -13,7 +13,7 @@ resource "aws_s3_object" "script" {
 }
 
 resource "aws_iam_role" "glue_role" {
-  name = "glue-job-role"
+  name = "glue-job-role-guna-from-tf"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
