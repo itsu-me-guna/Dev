@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "glue_scripts" {
 resource "aws_s3_object" "script" {
   bucket = aws_s3_bucket.glue_scripts.id
   key    = "scripts/My_Source_ingest.py"
-  source = "src\My_Source_ingest.py"   # local path to your file
+  source = "src/My_Source_ingest.py"   # local path to your file
 }
 
 resource "aws_iam_role" "glue_role" {
