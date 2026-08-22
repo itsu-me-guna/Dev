@@ -2,23 +2,35 @@ name: Deploy to AWS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]   # runs when you push to main branch
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout your repo
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      # Step 3: Terraform Init
       - name: Terraform Init
         run: terraform init
         working-directory: Project_dply/infra
 
+      # Step 4: Terraform Plan (preview changes)
+      - name: Terraform Plan
+        run: terraform plan
+        working-directory: Project_dply/infra
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # Step 5: Terraform Apply (deploy changes)
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: Project_dply/infra
